@@ -1,0 +1,576 @@
+{
+	"info": {
+		"_postman_id": "4e1b0c36-11a7-4f18-a35a-e10921b5812f",
+		"name": "Training API Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "28081621"
+	},
+	"item": [
+		{
+			"name": "Get Available Trainings",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json()",
+							"",
+							"pm.test(\"response status\", function() {",
+							"    pm.response.to.have.status(200)",
+							"})",
+							"",
+							"pm.test(\"data contains results\", function() {",
+							"    pm.expect(responseJson).to.be.an(\"array\")",
+							"    pm.expect(responseJson).to.eql([])",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/training",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"training"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add User Training",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json()",
+							"",
+							"pm.test(\"response status\", function() {",
+							"    pm.response.to.have.status(200)",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"User Added Training\",\n    \"description\": \"This is a user added training\",\n    \"lecturer\": \"Stephan Rover\",\n    \"price\": 1099,\n    \"startDate\": \"2023-11-01\",\n    \"endDate\": \"2023-12-15\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/training/add",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"training",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get User Training",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json()",
+							"",
+							"pm.test(\"response status\", function() {",
+							"    pm.response.to.have.status(200)",
+							"})",
+							"",
+							"pm.test(\"data contains result from previous request\", function() {",
+							"    pm.expect(responseJson).to.be.an(\"array\")",
+							"    pm.expect(responseJson[0]).to.haveOwnProperty(\"name\")",
+							"    pm.expect(responseJson[0].name).to.eql(\"User Added Training\")",
+							"    pm.expect(responseJson[0]).to.haveOwnProperty(\"description\")",
+							"    pm.expect(responseJson[0].description).to.eql(\"This is a user added training\")",
+							"    pm.expect(responseJson[0]).to.haveOwnProperty(\"lecturer\")",
+							"    pm.expect(responseJson[0].lecturer).to.eql(\"Stephan Rover\")",
+							"    pm.expect(responseJson[0]).to.haveOwnProperty(\"price\")",
+							"    pm.expect(responseJson[0].price).to.eql(1099)",
+							"    pm.expect(responseJson[0]).to.haveOwnProperty(\"startDate\")",
+							"    pm.expect(responseJson[0].startDate).to.eql(\"2023-11-01\")",
+							"    pm.expect(responseJson[0]).to.haveOwnProperty(\"endDate\")",
+							"    pm.expect(responseJson[0].endDate).to.eql(\"2023-12-15\")",
+							"    pm.expect(responseJson[0].bookedCustomer).to.be.an(\"array\")",
+							"    pm.expect(responseJson[0].bookedCustomer).to.eql([])",
+							"})",
+							"",
+							"pm.collectionVariables.set(\"USER_TRAINING_ID\", responseJson[0].id)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/training/name/User Added Training",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"training",
+						"name",
+						"User Added Training"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Book First User for Training",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json()",
+							"",
+							"pm.test(\"response status\", function() {",
+							"    pm.response.to.have.status(200)",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/training/book/{{USER_TRAINING_ID}}?customer_name=Helena Proke",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"training",
+						"book",
+						"{{USER_TRAINING_ID}}"
+					],
+					"query": [
+						{
+							"key": "customer_name",
+							"value": "Helena Proke"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Booked Training",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json()",
+							"",
+							"pm.test(\"response status\", function() {",
+							"    pm.response.to.have.status(200)",
+							"})",
+							"",
+							"pm.test(\"data contains result from previous request\", function() {",
+							"    pm.expect(responseJson).to.be.an(\"array\")",
+							"    pm.expect(responseJson[0]).to.haveOwnProperty(\"name\")",
+							"    pm.expect(responseJson[0].name).to.eql(\"User Added Training\")",
+							"    pm.expect(responseJson[0]).to.haveOwnProperty(\"description\")",
+							"    pm.expect(responseJson[0].description).to.eql(\"This is a user added training\")",
+							"    pm.expect(responseJson[0]).to.haveOwnProperty(\"lecturer\")",
+							"    pm.expect(responseJson[0].lecturer).to.eql(\"Stephan Rover\")",
+							"    pm.expect(responseJson[0]).to.haveOwnProperty(\"price\")",
+							"    pm.expect(responseJson[0].price).to.eql(1099)",
+							"    pm.expect(responseJson[0]).to.haveOwnProperty(\"startDate\")",
+							"    pm.expect(responseJson[0].startDate).to.eql(\"2023-11-01\")",
+							"    pm.expect(responseJson[0]).to.haveOwnProperty(\"endDate\")",
+							"    pm.expect(responseJson[0].endDate).to.eql(\"2023-12-15\")",
+							"    pm.expect(responseJson[0].bookedCustomer).to.be.an(\"array\")",
+							"    pm.expect(responseJson[0].bookedCustomer[0]).to.eql(\"Helena Proke\")",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/training/name/User Added Training",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"training",
+						"name",
+						"User Added Training"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Book Second User for Training",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json()",
+							"",
+							"pm.test(\"response status\", function() {",
+							"    pm.response.to.have.status(200)",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/training/book/{{USER_TRAINING_ID}}?customer_name=Mikail Prognose",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"training",
+						"book",
+						"{{USER_TRAINING_ID}}"
+					],
+					"query": [
+						{
+							"key": "customer_name",
+							"value": "Mikail Prognose"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Booked Training",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json()",
+							"",
+							"pm.test(\"response status\", function() {",
+							"    pm.response.to.have.status(200)",
+							"})",
+							"",
+							"pm.test(\"data contains result from previous request\", function() {",
+							"    pm.expect(responseJson).to.be.an(\"array\")",
+							"    pm.expect(responseJson[0]).to.haveOwnProperty(\"name\")",
+							"    pm.expect(responseJson[0].name).to.eql(\"User Added Training\")",
+							"    pm.expect(responseJson[0]).to.haveOwnProperty(\"description\")",
+							"    pm.expect(responseJson[0].description).to.eql(\"This is a user added training\")",
+							"    pm.expect(responseJson[0]).to.haveOwnProperty(\"lecturer\")",
+							"    pm.expect(responseJson[0].lecturer).to.eql(\"Stephan Rover\")",
+							"    pm.expect(responseJson[0]).to.haveOwnProperty(\"price\")",
+							"    pm.expect(responseJson[0].price).to.eql(1099)",
+							"    pm.expect(responseJson[0]).to.haveOwnProperty(\"startDate\")",
+							"    pm.expect(responseJson[0].startDate).to.eql(\"2023-11-01\")",
+							"    pm.expect(responseJson[0]).to.haveOwnProperty(\"endDate\")",
+							"    pm.expect(responseJson[0].endDate).to.eql(\"2023-12-15\")",
+							"    pm.expect(responseJson[0].bookedCustomer).to.be.an(\"array\")",
+							"    pm.expect(responseJson[0].bookedCustomer[0]).to.eql(\"Helena Proke\")",
+							"    pm.expect(responseJson[0].bookedCustomer[1]).to.eql(\"Mikail Prognose\")",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/training/name/User Added Training",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"training",
+						"name",
+						"User Added Training"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Schedule for User Training",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json()",
+							"",
+							"pm.test(\"response status\", function() {",
+							"    pm.response.to.have.status(200)",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"startDate\": \"2023-11-10\",\n    \"endDate\": \"2023-12-31\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/training/update/{{USER_TRAINING_ID}}",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"training",
+						"update",
+						"{{USER_TRAINING_ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Modified Training",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json()",
+							"",
+							"pm.test(\"response status\", function() {",
+							"    pm.response.to.have.status(200)",
+							"})",
+							"",
+							"pm.test(\"data contains result from previous request\", function() {",
+							"    pm.expect(responseJson).to.be.an(\"object\")",
+							"    pm.expect(responseJson).to.haveOwnProperty(\"startDate\")",
+							"    pm.expect(responseJson.startDate).to.eql(\"2023-11-10\")",
+							"    pm.expect(responseJson).to.haveOwnProperty(\"endDate\")",
+							"    pm.expect(responseJson.endDate).to.eql(\"2023-12-31\")",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/training/id/{{USER_TRAINING_ID}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"training",
+						"id",
+						"{{USER_TRAINING_ID}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add Second User Training",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json()",
+							"",
+							"pm.test(\"response status\", function() {",
+							"    pm.response.to.have.status(200)",
+							"})",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"User Added Training 2\",\n    \"description\": \"This is a second user added training\",\n    \"lecturer\": \"Stephan Jack\",\n    \"price\": 2099,\n    \"startDate\": \"2023-10-01\",\n    \"endDate\": \"2023-10-30\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/training/add",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"training",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Available Trainings",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json()",
+							"",
+							"pm.test(\"response status\", function() {",
+							"    pm.response.to.have.status(200)",
+							"})",
+							"",
+							"pm.test(\"data contains results\", function() {",
+							"    pm.expect(responseJson).to.be.an(\"array\")",
+							"    pm.expect(responseJson).to.eql([])",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/training",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"training"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Training Within Range",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const responseJson = pm.response.json()",
+							"",
+							"pm.test(\"response status\", function() {",
+							"    pm.response.to.have.status(200)",
+							"})",
+							"",
+							"pm.test(\"data contains result from previous request\", function() {",
+							"    pm.expect(responseJson).to.be.an(\"array\")",
+							"    pm.expect(responseJson[0]).to.haveOwnProperty(\"name\")",
+							"    pm.expect(responseJson[0].name).to.eql(\"User Added Training 2\")",
+							"    pm.expect(responseJson[0]).to.haveOwnProperty(\"lecturer\")",
+							"    pm.expect(responseJson[0].lecturer).to.eql(\"Stephan Jack\")",
+							"    pm.expect(responseJson[0]).to.haveOwnProperty(\"startDate\")",
+							"    pm.expect(responseJson[0].startDate).to.eql(\"2023-10-01\")",
+							"    pm.expect(responseJson[0]).to.haveOwnProperty(\"endDate\")",
+							"    pm.expect(responseJson[0].endDate).to.eql(\"2023-10-30\")",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/training/range?start=2023-10-01&end=2023-10-10",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"training",
+						"range"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "2023-10-01"
+						},
+						{
+							"key": "end",
+							"value": "2023-10-10"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "AVAILABLE_TRAININGS",
+			"value": ""
+		},
+		{
+			"key": "USER_TRAINING_ID",
+			"value": ""
+		}
+	]
+}
